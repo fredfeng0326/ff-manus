@@ -1,4 +1,9 @@
-# Database Setup with Docker
+# FF Manus
+
+FF Manus is a multi-agent project built with OpenAI JDK, with FastAPI as the backend framework.
+This repository contains the API service and infrastructure setup for storage, migrations, and testing.
+
+## Database Setup with Docker
 
 This project uses PostgreSQL and Redis. You can create both services with Docker using the commands below.
 
