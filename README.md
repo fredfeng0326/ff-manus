@@ -30,6 +30,12 @@ docker run -d \
   redis
 ```
 
+## Redis message queue & tasks (overview)
+
+The **domain** only describes abstract roles: something that behaves like a **message queue**, and something that behaves like a **task** with a **runner**. The **infrastructure** implements that with **Redis Streams** for durable in/out queues, and **asyncio** to run the runner in the background.
+
+In short: **Redis** holds the queued messages; **your process** runs the task logic and reads/writes those queues. A **task** is wired with two streams (input and output) so producers and consumers can stay decoupled. Related code lives under `app/domain/external/` and `app/infrastructure/external/` (queue and task implementations).
+
 ## 3) Database Migrations with Alembic
 
 Use Alembic to create and apply database schema migrations.
