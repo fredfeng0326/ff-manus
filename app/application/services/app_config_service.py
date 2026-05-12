@@ -5,7 +5,7 @@
 @Author  : fred.feng0326@gmail.com
 @File    : app_config_service.py
 """
-from app.domain.models.app_config import AppConfig, LLMConfig
+from app.domain.models.app_config import AppConfig, LLMConfig, AgentConfig
 from app.domain.repositories.app_config_repository import AppConfigRepository
 
 
@@ -39,3 +39,19 @@ class AppConfigService:
         self.app_config_repository.save(app_config)
 
         return app_config.llm_config
+
+    async def get_agent_config(self) -> AgentConfig:
+        """get Agent setting"""
+        app_config = await self._load_app_config()
+        return app_config.agent_config
+
+    async def update_agent_config(self, agent_config: AgentConfig) -> AgentConfig:
+        """update agent config"""
+        # 1.get app agent config
+        app_config = await self._load_app_config()
+
+        # 2.update app_config by function
+        app_config.agent_config = agent_config
+        self.app_config_repository.save(app_config)
+
+        return app_config.agent_config

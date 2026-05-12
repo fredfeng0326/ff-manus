@@ -11,6 +11,7 @@ dependencies = [
     "fastapi>=0.136.1",
     "filelock>=3.29.0",
     "httpx>=0.28.1",
+    "json-repair>=0.59.7",
     "openai>=2.34.0",
     "psycopg2-binary>=2.9.12",
     "pydantic>=2.13.3",

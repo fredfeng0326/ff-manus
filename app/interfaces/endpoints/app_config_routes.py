@@ -10,7 +10,7 @@ import logging
 from fastapi import APIRouter, Depends
 
 from app.application.services.app_config_service import AppConfigService
-from app.domain.models.app_config import LLMConfig
+from app.domain.models.app_config import LLMConfig, AgentConfig
 from app.interfaces.schemas.base import Response
 from app.interfaces.service_dependencies import get_app_config_service
 
@@ -47,4 +47,36 @@ async def update_llm_config(
     return Response.success(
         msg="LLM configuration updated successfully.",
         data=updated_llm_config.model_dump(exclude={"api_key"})
+    )
+
+
+@router.get(
+    path="/agent",
+    response_model=Response[AgentConfig],
+    summary="Get agent configuration",
+    description="Returns max_iterations, max_retries, and max_search_results.",
+)
+async def get_agent_config(
+        app_config_service: AppConfigService = Depends(get_app_config_service)
+) -> Response[AgentConfig]:
+    """Get general agent configuration."""
+    agent_config = await app_config_service.get_agent_config()
+    return Response.success(data=agent_config.model_dump())
+
+
+@router.post(
+    path="/agent",
+    response_model=Response[AgentConfig],
+    summary="Update agent configuration",
+    description="Updates general agent settings (iterations, retries, search limits).",
+)
+async def update_agent_config(
+        new_agent_config: AgentConfig,
+        app_config_service: AppConfigService = Depends(get_app_config_service)
+) -> Response[AgentConfig]:
+    """Update general agent configuration."""
+    updated_agent_config = await app_config_service.update_agent_config(new_agent_config)
+    return Response.success(
+        msg="Agent configuration updated successfully.",
+        data=updated_agent_config.model_dump()
     )
